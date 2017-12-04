@@ -77,27 +77,6 @@ print ('The shape of Y is: ' + str(shape_Y))
 print ('I have m = %d training examples!' % (m))
 
 
-# **Expected Output**:
-#        
-# <table style="width:20%">
-#   
-#   <tr>
-#     <td>**shape of X**</td>
-#     <td> (2, 400) </td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>**shape of Y**</td>
-#     <td>(1, 400) </td> 
-#   </tr>
-#   
-#     <tr>
-#     <td>**m**</td>
-#     <td> 400 </td> 
-#   </tr>
-#   
-# </table>
-
 # ## 3 - Simple Logistic Regression
 # 
 # Before building a full neural network, lets first see how logistic regression performs on this problem. You can use sklearn's built-in functions to do that. Run the code below to train a logistic regression classifier on the dataset.
@@ -122,17 +101,6 @@ LR_predictions = clf.predict(X.T)
 print ('Accuracy of logistic regression: %d ' % float((np.dot(Y,LR_predictions) + np.dot(1-Y,1-LR_predictions))/float(Y.size)*100) +
        '% ' + "(percentage of correctly labelled datapoints)")
 
-
-# **Expected Output**:
-# 
-# <table style="width:20%">
-#   <tr>
-#     <td>**Accuracy**</td>
-#     <td> 47% </td> 
-#   </tr>
-#   
-# </table>
-# 
 
 # **Interpretation**: The dataset is not linearly separable, so logistic regression doesn't perform well. Hopefully a neural network will do better. Let's try this now! 
 
@@ -207,26 +175,6 @@ print("The size of the hidden layer is: n_h = " + str(n_h))
 print("The size of the output layer is: n_y = " + str(n_y))
 
 
-# **Expected Output** (these are not the sizes you will use for your network, they are just used to assess the function you've just coded).
-# 
-# <table style="width:20%">
-#   <tr>
-#     <td>**n_x**</td>
-#     <td> 5 </td> 
-#   </tr>
-#   
-#     <tr>
-#     <td>**n_h**</td>
-#     <td> 4 </td> 
-#   </tr>
-#   
-#     <tr>
-#     <td>**n_y**</td>
-#     <td> 2 </td> 
-#   </tr>
-#   
-# </table>
-
 # ### 4.2 - Initialize the model's parameters ####
 # 
 # **Exercise**: Implement the function `initialize_parameters()`.
@@ -288,41 +236,7 @@ print("W1 = " + str(parameters["W1"]))
 print("b1 = " + str(parameters["b1"]))
 print("W2 = " + str(parameters["W2"]))
 print("b2 = " + str(parameters["b2"]))
-
-
-# **Expected Output**:
-# 
-# <table style="width:90%">
-#   <tr>
-#     <td>**W1**</td>
-#     <td> [[-0.00416758 -0.00056267]
-#  [-0.02136196  0.01640271]
-#  [-0.01793436 -0.00841747]
-#  [ 0.00502881 -0.01245288]] </td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>**b1**</td>
-#     <td> [[ 0.]
-#  [ 0.]
-#  [ 0.]
-#  [ 0.]] </td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>**W2**</td>
-#     <td> [[-0.01057952 -0.00909008  0.00551454  0.02292208]]</td> 
-#   </tr>
-#   
-# 
-#   <tr>
-#     <td>**b2**</td>
-#     <td> [[ 0.]] </td> 
-#   </tr>
-#   
-# </table>
-# 
-# 
+ 
 
 # ### 4.3 - The Loop ####
 # 
@@ -386,12 +300,6 @@ A2, cache = forward_propagation(X_assess, parameters)
 print(np.mean(cache['Z1']) ,np.mean(cache['A1']),np.mean(cache['Z2']),np.mean(cache['A2']))
 
 
-# **Expected Output**:
-# <table style="width:50%">
-#   <tr>
-#     <td> 0.262818640198 0.091999045227 -1.30766601287 0.212877681719 </td> 
-#   </tr>
-# </table>
 
 # Now that you have computed $A^{[2]}$ (in the Python variable "`A2`"), which contains $a^{[2](i)}$ for every example, you can compute the cost function as follows:
 # 
@@ -449,14 +357,6 @@ A2, Y_assess, parameters = compute_cost_test_case()
 print("cost = " + str(compute_cost(A2, Y_assess, parameters)))
 
 
-# **Expected Output**:
-# <table style="width:20%">
-#   <tr>
-#     <td>**cost**</td>
-#     <td> 0.693058761... </td> 
-#   </tr>
-#   
-# </table>
 
 # Using the cache computed during forward propagation, you can now implement backward propagation.
 # 
@@ -553,40 +453,6 @@ print ("dW2 = "+ str(grads["dW2"]))
 print ("db2 = "+ str(grads["db2"]))
 
 
-# **Expected output**:
-# 
-# 
-# 
-# <table style="width:80%">
-#   <tr>
-#     <td>**dW1**</td>
-#     <td> [[ 0.00301023 -0.00747267]
-#  [ 0.00257968 -0.00641288]
-#  [-0.00156892  0.003893  ]
-#  [-0.00652037  0.01618243]] </td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>**db1**</td>
-#     <td>  [[ 0.00176201]
-#  [ 0.00150995]
-#  [-0.00091736]
-#  [-0.00381422]] </td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>**dW2**</td>
-#     <td> [[ 0.00078841  0.01765429 -0.00084166 -0.01022527]] </td> 
-#   </tr>
-#   
-# 
-#   <tr>
-#     <td>**db2**</td>
-#     <td> [[-0.16655712]] </td> 
-#   </tr>
-#   
-# </table>  
-
 # **Question**: Implement the update rule. Use gradient descent. You have to use (dW1, db1, dW2, db2) in order to update (W1, b1, W2, b2).
 # 
 # **General gradient descent rule**: $ \theta = \theta - \alpha \frac{\partial J }{ \partial \theta }$ where $\alpha$ is the learning rate and $\theta$ represents a parameter.
@@ -654,39 +520,6 @@ print("b1 = " + str(parameters["b1"]))
 print("W2 = " + str(parameters["W2"]))
 print("b2 = " + str(parameters["b2"]))
 
-
-# **Expected Output**:
-# 
-# 
-# <table style="width:80%">
-#   <tr>
-#     <td>**W1**</td>
-#     <td> [[-0.00643025  0.01936718]
-#  [-0.02410458  0.03978052]
-#  [-0.01653973 -0.02096177]
-#  [ 0.01046864 -0.05990141]]</td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>**b1**</td>
-#     <td> [[ -1.02420756e-06]
-#  [  1.27373948e-05]
-#  [  8.32996807e-07]
-#  [ -3.20136836e-06]]</td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>**W2**</td>
-#     <td> [[-0.01041081 -0.04463285  0.01758031  0.04747113]] </td> 
-#   </tr>
-#   
-# 
-#   <tr>
-#     <td>**b2**</td>
-#     <td> [[ 0.00010457]] </td> 
-#   </tr>
-#   
-# </table>  
 
 # ### 4.4 - Integrate parts 4.1, 4.2 and 4.3 in nn_model() ####
 # 
@@ -760,56 +593,6 @@ print("W2 = " + str(parameters["W2"]))
 print("b2 = " + str(parameters["b2"]))
 
 
-# **Expected Output**:
-# 
-# <table style="width:90%">
-# 
-# <tr> 
-#     <td> 
-#         **cost after iteration 0**
-#     </td>
-#     <td> 
-#         0.692739
-#     </td>
-# </tr>
-# 
-# <tr> 
-#     <td> 
-#         <center> $\vdots$ </center>
-#     </td>
-#     <td> 
-#         <center> $\vdots$ </center>
-#     </td>
-# </tr>
-# 
-#   <tr>
-#     <td>**W1**</td>
-#     <td> [[-0.65848169  1.21866811]
-#  [-0.76204273  1.39377573]
-#  [ 0.5792005  -1.10397703]
-#  [ 0.76773391 -1.41477129]]</td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>**b1**</td>
-#     <td> [[ 0.287592  ]
-#  [ 0.3511264 ]
-#  [-0.2431246 ]
-#  [-0.35772805]] </td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>**W2**</td>
-#     <td> [[-2.45566237 -3.27042274  2.00784958  3.36773273]] </td> 
-#   </tr>
-#   
-# 
-#   <tr>
-#     <td>**b2**</td>
-#     <td> [[ 0.20459656]] </td> 
-#   </tr>
-#   
-# </table>  
 
 # ### 4.5 Predictions
 # 
@@ -856,17 +639,6 @@ predictions = predict(parameters, X_assess)
 print("predictions mean = " + str(np.mean(predictions)))
 
 
-# **Expected Output**: 
-# 
-# 
-# <table style="width:40%">
-#   <tr>
-#     <td>**predictions mean**</td>
-#     <td> 0.666666666667 </td> 
-#   </tr>
-#   
-# </table>
-
 # It is time to run the model and see how it performs on a planar dataset. Run the following code to test your model with a single hidden layer of $n_h$ hidden units.
 
 # In[26]:
@@ -879,16 +651,6 @@ plot_decision_boundary(lambda x: predict(parameters, x.T), X, Y)
 plt.title("Decision Boundary for hidden layer size " + str(4))
 
 
-# **Expected Output**:
-# 
-# <table style="width:40%">
-#   <tr>
-#     <td>**Cost after iteration 9000**</td>
-#     <td> 0.218607 </td> 
-#   </tr>
-#   
-# </table>
-# 
 
 # In[27]:
 
@@ -896,15 +658,6 @@ plt.title("Decision Boundary for hidden layer size " + str(4))
 predictions = predict(parameters, X)
 print ('Accuracy: %d' % float((np.dot(Y,predictions.T) + np.dot(1-Y,1-predictions.T))/float(Y.size)*100) + '%')
 
-
-# **Expected Output**: 
-# 
-# <table style="width:15%">
-#   <tr>
-#     <td>**Accuracy**</td>
-#     <td> 90% </td> 
-#   </tr>
-# </table>
 
 # Accuracy is really high compared to Logistic Regression. The model has learnt the leaf patterns of the flower! Neural networks are able to learn even highly non-linear decision boundaries, unlike logistic regression. 
 # 
@@ -980,15 +733,3 @@ if dataset == "blobs":
 
 # Visualize the data
 plt.scatter(X[0, :], X[1, :], c=Y, s=40, cmap=plt.cm.Spectral);
-
-
-# Congrats on finishing this Programming Assignment!
-# 
-# Reference:
-# - http://scs.ryerson.ca/~aharley/neural-networks/
-# - http://cs231n.github.io/neural-networks-case-study/
-
-# In[ ]:
-
-
-
