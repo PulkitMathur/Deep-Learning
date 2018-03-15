@@ -2,26 +2,6 @@
 # coding: utf-8
 
 # # Planar data classification with one hidden layer
-# 
-# Welcome to your week 3 programming assignment. It's time to build your first neural network, which will have a hidden layer. You will see a big difference between this model and the one you implemented using logistic regression. 
-# 
-# **You will learn how to:**
-# - Implement a 2-class classification neural network with a single hidden layer
-# - Use units with a non-linear activation function, such as tanh 
-# - Compute the cross entropy loss 
-# - Implement forward and backward propagation
-# 
-
-# ## 1 - Packages ##
-# 
-# Let's first import all the packages that you will need during this assignment.
-# - [numpy](www.numpy.org) is the fundamental package for scientific computing with Python.
-# - [sklearn](http://scikit-learn.org/stable/) provides simple and efficient tools for data mining and data analysis. 
-# - [matplotlib](http://matplotlib.org) is a library for plotting graphs in Python.
-# - testCases provides some test examples to assess the correctness of your functions
-# - planar_utils provide various useful functions used in this assignment
-
-# In[1]:
 
 # Package imports
 import numpy as np
@@ -58,19 +38,9 @@ plt.scatter(X[0, :], X[1, :], c=Y, s=40, cmap=plt.cm.Spectral);
 #     - a numpy-array (matrix) X that contains your features (x1, x2)
 #     - a numpy-array (vector) Y that contains your labels (red:0, blue:1).
 # 
-# Lets first get a better sense of what our data is like. 
-# 
-# **Exercise**: How many training examples do you have? In addition, what is the `shape` of the variables `X` and `Y`? 
-# 
-# **Hint**: How do you get the shape of a numpy array? [(help)](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.shape.html)
-
-# In[6]:
-
-### START CODE HERE ### (≈ 3 lines of code)
 shape_X = X.shape
 shape_Y = Y.shape
 m = Y.shape[1]  # training set size
-### END CODE HERE ###
 
 print ('The shape of X is: ' + str(shape_X))
 print ('The shape of Y is: ' + str(shape_Y))
@@ -108,21 +78,7 @@ print ('Accuracy of logistic regression: %d ' % float((np.dot(Y,LR_predictions) 
 # 
 # Logistic regression did not work well on the "flower dataset". You are going to train a Neural Network with a single hidden layer.
 # 
-# **Here is our model**:
-# <img src="images/classification_kiank.png" style="width:600px;height:300px;">
-# 
-# **Mathematically**:
-# 
-# For one example $x^{(i)}$:
-# $$z^{[1] (i)} =  W^{[1]} x^{(i)} + b^{[1] (i)}\tag{1}$$ 
-# $$a^{[1] (i)} = \tanh(z^{[1] (i)})\tag{2}$$
-# $$z^{[2] (i)} = W^{[2]} a^{[1] (i)} + b^{[2] (i)}\tag{3}$$
-# $$\hat{y}^{(i)} = a^{[2] (i)} = \sigma(z^{ [2] (i)})\tag{4}$$
-# $$y^{(i)}_{prediction} = \begin{cases} 1 & \mbox{if } a^{[2](i)} > 0.5 \\ 0 & \mbox{otherwise } \end{cases}\tag{5}$$
-# 
-# Given the predictions on all the examples, you can also compute the cost $J$ as follows: 
-# $$J = - \frac{1}{m} \sum\limits_{i = 0}^{m} \large\left(\small y^{(i)}\log\left(a^{[2] (i)}\right) + (1-y^{(i)})\log\left(1- a^{[2] (i)}\right)  \large  \right) \small \tag{6}$$
-# 
+
 # **Reminder**: The general methodology to build a Neural Network is to:
 #     1. Define the neural network structure ( # of input units,  # of hidden units, etc). 
 #     2. Initialize the model's parameters
@@ -132,20 +88,7 @@ print ('Accuracy of logistic regression: %d ' % float((np.dot(Y,LR_predictions) 
 #         - Implement backward propagation to get the gradients
 #         - Update parameters (gradient descent)
 # 
-# You often build helper functions to compute steps 1-3 and then merge them into one function we call `nn_model()`. Once you've built `nn_model()` and learnt the right parameters, you can make predictions on new data.
 
-# ### 4.1 - Defining the neural network structure ####
-# 
-# **Exercise**: Define three variables:
-#     - n_x: the size of the input layer
-#     - n_h: the size of the hidden layer (set this to 4) 
-#     - n_y: the size of the output layer
-# 
-# **Hint**: Use shapes of X and Y to find n_x and n_y. Also, hard code the hidden layer size to be 4.
-
-# In[10]:
-
-# GRADED FUNCTION: layer_sizes
 
 def layer_sizes(X, Y):
     """
@@ -177,18 +120,12 @@ print("The size of the output layer is: n_y = " + str(n_y))
 
 # ### 4.2 - Initialize the model's parameters ####
 # 
-# **Exercise**: Implement the function `initialize_parameters()`.
-# 
-# **Instructions**:
 # - Make sure your parameters' sizes are right. Refer to the neural network figure above if needed.
 # - You will initialize the weights matrices with random values. 
 #     - Use: `np.random.randn(a,b) * 0.01` to randomly initialize a matrix of shape (a,b).
 # - You will initialize the bias vectors as zeros. 
 #     - Use: `np.zeros((a,b))` to initialize a matrix of shape (a,b) with zeros.
 
-# In[12]:
-
-# GRADED FUNCTION: initialize_parameters
 
 def initialize_parameters(n_x, n_h, n_y):
     """
@@ -240,20 +177,12 @@ print("b2 = " + str(parameters["b2"]))
 
 # ### 4.3 - The Loop ####
 # 
-# **Question**: Implement `forward_propagation()`.
-# 
-# **Instructions**:
-# - Look above at the mathematical representation of your classifier.
 # - You can use the function `sigmoid()`. It is built-in (imported) in the notebook.
 # - You can use the function `np.tanh()`. It is part of the numpy library.
 # - The steps you have to implement are:
 #     1. Retrieve each parameter from the dictionary "parameters" (which is the output of `initialize_parameters()`) by using `parameters[".."]`.
 #     2. Implement Forward Propagation. Compute $Z^{[1]}, A^{[1]}, Z^{[2]}$ and $A^{[2]}$ (the vector of all your predictions on all the examples in the training set).
 # - Values needed in the backpropagation are stored in "`cache`". The `cache` will be given as an input to the backpropagation function.
-
-# In[14]:
-
-# GRADED FUNCTION: forward_propagation
 
 def forward_propagation(X, parameters):
     """
@@ -301,27 +230,6 @@ print(np.mean(cache['Z1']) ,np.mean(cache['A1']),np.mean(cache['Z2']),np.mean(ca
 
 
 
-# Now that you have computed $A^{[2]}$ (in the Python variable "`A2`"), which contains $a^{[2](i)}$ for every example, you can compute the cost function as follows:
-# 
-# $$J = - \frac{1}{m} \sum\limits_{i = 0}^{m} \large{(} \small y^{(i)}\log\left(a^{[2] (i)}\right) + (1-y^{(i)})\log\left(1- a^{[2] (i)}\right) \large{)} \small\tag{13}$$
-# 
-# **Exercise**: Implement `compute_cost()` to compute the value of the cost $J$.
-# 
-# **Instructions**:
-# - There are many ways to implement the cross-entropy loss. To help you, we give you how we would have implemented
-# $- \sum\limits_{i=0}^{m}  y^{(i)}\log(a^{[2](i)})$:
-# ```python
-# logprobs = np.multiply(np.log(A2),Y)
-# cost = - np.sum(logprobs)                # no need to use a for loop!
-# ```
-# 
-# (you can use either `np.multiply()` and then `np.sum()` or directly `np.dot()`).
-# 
-
-# In[16]:
-
-# GRADED FUNCTION: compute_cost
-
 def compute_cost(A2, Y, parameters):
     """
     Computes the cross-entropy cost given in equation (13)
@@ -357,45 +265,6 @@ A2, Y_assess, parameters = compute_cost_test_case()
 print("cost = " + str(compute_cost(A2, Y_assess, parameters)))
 
 
-
-# Using the cache computed during forward propagation, you can now implement backward propagation.
-# 
-# **Question**: Implement the function `backward_propagation()`.
-# 
-# **Instructions**:
-# Backpropagation is usually the hardest (most mathematical) part in deep learning. To help you, here again is the slide from the lecture on backpropagation. You'll want to use the six equations on the right of this slide, since you are building a vectorized implementation.  
-# 
-# <img src="images/grad_summary.png" style="width:600px;height:300px;">
-# 
-# <!--
-# $\frac{\partial \mathcal{J} }{ \partial z_{2}^{(i)} } = \frac{1}{m} (a^{[2](i)} - y^{(i)})$
-# 
-# $\frac{\partial \mathcal{J} }{ \partial W_2 } = \frac{\partial \mathcal{J} }{ \partial z_{2}^{(i)} } a^{[1] (i) T} $
-# 
-# $\frac{\partial \mathcal{J} }{ \partial b_2 } = \sum_i{\frac{\partial \mathcal{J} }{ \partial z_{2}^{(i)}}}$
-# 
-# $\frac{\partial \mathcal{J} }{ \partial z_{1}^{(i)} } =  W_2^T \frac{\partial \mathcal{J} }{ \partial z_{2}^{(i)} } * ( 1 - a^{[1] (i) 2}) $
-# 
-# $\frac{\partial \mathcal{J} }{ \partial W_1 } = \frac{\partial \mathcal{J} }{ \partial z_{1}^{(i)} }  X^T $
-# 
-# $\frac{\partial \mathcal{J} _i }{ \partial b_1 } = \sum_i{\frac{\partial \mathcal{J} }{ \partial z_{1}^{(i)}}}$
-# 
-# - Note that $*$ denotes elementwise multiplication.
-# - The notation you will use is common in deep learning coding:
-#     - dW1 = $\frac{\partial \mathcal{J} }{ \partial W_1 }$
-#     - db1 = $\frac{\partial \mathcal{J} }{ \partial b_1 }$
-#     - dW2 = $\frac{\partial \mathcal{J} }{ \partial W_2 }$
-#     - db2 = $\frac{\partial \mathcal{J} }{ \partial b_2 }$
-#     
-# !-->
-# 
-# - Tips:
-#     - To compute dZ1 you'll need to compute $g^{[1]'}(Z^{[1]})$. Since $g^{[1]}(.)$ is the tanh activation function, if $a = g^{[1]}(z)$ then $g^{[1]'}(z) = 1-a^2$. So you can compute 
-#     $g^{[1]'}(Z^{[1]})$ using `(1 - np.power(A1, 2))`.
-
-# In[18]:
-
-# GRADED FUNCTION: backward_propagation
 
 def backward_propagation(parameters, cache, X, Y):
     """
@@ -452,20 +321,6 @@ print ("db1 = "+ str(grads["db1"]))
 print ("dW2 = "+ str(grads["dW2"]))
 print ("db2 = "+ str(grads["db2"]))
 
-
-# **Question**: Implement the update rule. Use gradient descent. You have to use (dW1, db1, dW2, db2) in order to update (W1, b1, W2, b2).
-# 
-# **General gradient descent rule**: $ \theta = \theta - \alpha \frac{\partial J }{ \partial \theta }$ where $\alpha$ is the learning rate and $\theta$ represents a parameter.
-# 
-# **Illustration**: The gradient descent algorithm with a good learning rate (converging) and a bad learning rate (diverging). Images courtesy of Adam Harley.
-# 
-# <img src="images/sgd.gif" style="width:400;height:400;"> <img src="images/sgd_bad.gif" style="width:400;height:400;">
-# 
-# 
-
-# In[20]:
-
-# GRADED FUNCTION: update_parameters
 
 def update_parameters(parameters, grads, learning_rate = 1.2):
     """
@@ -594,22 +449,6 @@ print("b2 = " + str(parameters["b2"]))
 
 
 
-# ### 4.5 Predictions
-# 
-# **Question**: Use your model to predict by building predict().
-# Use forward propagation to predict results.
-# 
-# **Reminder**: predictions = $y_{prediction} = \mathbb 1 \text{{activation > 0.5}} = \begin{cases}
-#       1 & \text{if}\ activation > 0.5 \\
-#       0 & \text{otherwise}
-#     \end{cases}$  
-#     
-# As an example, if you would like to set the entries of a matrix X to 0 and 1 based on a threshold you would do: ```X_new = (X > threshold)```
-
-# In[24]:
-
-# GRADED FUNCTION: predict
-
 def predict(parameters, X):
     """
     Using the learned parameters, predicts a class for each example in X
@@ -639,10 +478,6 @@ predictions = predict(parameters, X_assess)
 print("predictions mean = " + str(np.mean(predictions)))
 
 
-# It is time to run the model and see how it performs on a planar dataset. Run the following code to test your model with a single hidden layer of $n_h$ hidden units.
-
-# In[26]:
-
 # Build a model with a n_h-dimensional hidden layer
 parameters = nn_model(X, Y, n_h = 4, num_iterations = 10000, print_cost=True)
 
@@ -652,24 +487,11 @@ plt.title("Decision Boundary for hidden layer size " + str(4))
 
 
 
-# In[27]:
 
 # Print accuracy
 predictions = predict(parameters, X)
 print ('Accuracy: %d' % float((np.dot(Y,predictions.T) + np.dot(1-Y,1-predictions.T))/float(Y.size)*100) + '%')
 
-
-# Accuracy is really high compared to Logistic Regression. The model has learnt the leaf patterns of the flower! Neural networks are able to learn even highly non-linear decision boundaries, unlike logistic regression. 
-# 
-# Now, let's try out several hidden layer sizes.
-
-# ### 4.6 - Tuning hidden layer size (optional/ungraded exercise) ###
-# 
-# Run the following code. It may take 1-2 minutes. You will observe different behaviors of the model for various hidden layer sizes.
-
-# In[ ]:
-
-# This may take about 2 minutes to run
 
 plt.figure(figsize=(16, 32))
 hidden_layer_sizes = [1, 2, 3, 4, 5, 20, 50]
@@ -683,36 +505,6 @@ for i, n_h in enumerate(hidden_layer_sizes):
     print ("Accuracy for {} hidden units: {} %".format(n_h, accuracy))
 
 
-# **Interpretation**:
-# - The larger models (with more hidden units) are able to fit the training set better, until eventually the largest models overfit the data. 
-# - The best hidden layer size seems to be around n_h = 5. Indeed, a value around here seems to  fits the data well without also incurring noticable overfitting.
-# - You will also learn later about regularization, which lets you use very large models (such as n_h = 50) without much overfitting. 
-
-# **Optional questions**:
-# 
-# **Note**: Remember to submit the assignment but clicking the blue "Submit Assignment" button at the upper-right. 
-# 
-# Some optional/ungraded questions that you can explore if you wish: 
-# - What happens when you change the tanh activation for a sigmoid activation or a ReLU activation?
-# - Play with the learning_rate. What happens?
-# - What if we change the dataset? (See part 5 below!)
-
-# <font color='blue'>
-# **You've learnt to:**
-# - Build a complete neural network with a hidden layer
-# - Make a good use of a non-linear unit
-# - Implemented forward propagation and backpropagation, and trained a neural network
-# - See the impact of varying the hidden layer size, including overfitting.
-
-# Nice work! 
-
-# ## 5) Performance on other datasets
-
-# If you want, you can rerun the whole notebook (minus the dataset part) for each of the following datasets.
-
-# In[ ]:
-
-# Datasets
 noisy_circles, noisy_moons, blobs, gaussian_quantiles, no_structure = load_extra_datasets()
 
 datasets = {"noisy_circles": noisy_circles,
