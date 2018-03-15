@@ -1,15 +1,4 @@
 
-# coding: utf-8
-
-# # Regularization
-# 
-# Welcome to the second assignment of this week. Deep Learning models have so much flexibility and capacity that **overfitting can be a serious problem**, if the training dataset is not big enough. Sure it does well on the training set, but the learned network **doesn't generalize to new examples** that it has never seen!
-# 
-# **You will learn to:** Use regularization in your deep learning models.
-# 
-# Let's first import the packages you are going to use.
-
-# In[1]:
 
 # import packages
 import numpy as np
@@ -44,7 +33,7 @@ train_X, train_Y, test_X, test_Y = load_2D_dataset()
 # - If the dot is blue, it means the French player managed to hit the ball with his/her head
 # - If the dot is red, it means the other team's player hit the ball with their head
 # 
-# **Your goal**: Use a deep learning model to find the positions on the field where the goalkeeper should kick the ball.
+# **Goal**: Use a deep learning model to find the positions on the field where the goalkeeper should kick the ball.
 
 # **Analysis of the dataset**: This dataset is a little noisy, but it looks like a diagonal line separating the upper left half (blue) from the lower right half (red) would work well. 
 # 
@@ -56,7 +45,7 @@ train_X, train_Y, test_X, test_Y = load_2D_dataset()
 # - in *regularization mode* -- by setting the `lambd` input to a non-zero value. We use "`lambd`" instead of "`lambda`" because "`lambda`" is a reserved keyword in Python. 
 # - in *dropout mode* -- by setting the `keep_prob` to a value less than one
 # 
-# You will first try the model without any regularization. Then, you will implement:
+# Try the model without any regularization. Then, you will implement:
 # - *L2 regularization* -- functions: "`compute_cost_with_regularization()`" and "`backward_propagation_with_regularization()`"
 # - *Dropout* -- functions: "`forward_propagation_with_dropout()`" and "`backward_propagation_with_dropout()`"
 # 
@@ -212,27 +201,6 @@ A3, Y_assess, parameters = compute_cost_with_regularization_test_case()
 print("cost = " + str(compute_cost_with_regularization(A3, Y_assess, parameters, lambd = 0.1)))
 
 
-# **Expected Output**: 
-# 
-# <table> 
-#     <tr>
-#     <td>
-#     **cost**
-#     </td>
-#         <td>
-#     1.78648594516
-#     </td>
-#     
-#     </tr>
-# 
-# </table> 
-
-# Of course, because you changed the cost, you have to change backward propagation as well! All the gradients have to be computed with respect to this new cost. 
-# 
-# **Exercise**: Implement the changes needed in backward propagation to take into account regularization. The changes only concern dW1, dW2 and dW3. For each, you have to add the regularization term's gradient ($\frac{d}{dW} ( \frac{1}{2}\frac{\lambda}{m}  W^2) = \frac{\lambda}{m} W$).
-
-# In[8]:
-
 # GRADED FUNCTION: backward_propagation_with_regularization
 
 def backward_propagation_with_regularization(X, Y, cache, lambd):
@@ -290,44 +258,6 @@ print ("dW2 = "+ str(grads["dW2"]))
 print ("dW3 = "+ str(grads["dW3"]))
 
 
-# **Expected Output**:
-# 
-# <table> 
-#     <tr>
-#     <td>
-#     **dW1**
-#     </td>
-#         <td>
-#     [[-0.25604646  0.12298827 -0.28297129]
-#  [-0.17706303  0.34536094 -0.4410571 ]]
-#     </td>
-#     </tr>
-#     <tr>
-#     <td>
-#     **dW2**
-#     </td>
-#         <td>
-#     [[ 0.79276486  0.85133918]
-#  [-0.0957219  -0.01720463]
-#  [-0.13100772 -0.03750433]]
-#     </td>
-#     </tr>
-#     <tr>
-#     <td>
-#     **dW3**
-#     </td>
-#         <td>
-#     [[-1.77691347 -0.11832879 -0.09397446]]
-#     </td>
-#     </tr>
-# </table> 
-
-# Let's now run the model with L2 regularization $(\lambda = 0.7)$. The `model()` function will call: 
-# - `compute_cost_with_regularization` instead of `compute_cost`
-# - `backward_propagation_with_regularization` instead of `backward_propagation`
-
-# In[10]:
-
 parameters = model(train_X, train_Y, lambd = 0.7)
 print ("On the train set:")
 predictions_train = predict(train_X, train_Y, parameters)
@@ -335,11 +265,6 @@ print ("On the test set:")
 predictions_test = predict(test_X, test_Y, parameters)
 
 
-# Congrats, the test set accuracy increased to 93%. You have saved the French football team!
-# 
-# You are not overfitting the training data anymore. Let's plot the decision boundary.
-
-# In[11]:
 
 plt.title("Model with L2-regularization")
 axes = plt.gca()
@@ -377,38 +302,6 @@ plot_decision_boundary(lambda x: predict_dec(parameters, x.T), train_X, train_Y)
 # - Friend: "I see, but are you sure that your neurons are learning different features and not all the same features?"
 # - You: "Good point... Neurons in the same layer actually don't talk to each other. It should be definitly possible that they learn the same image features/shapes/forms/details... which would be redundant. There should be a solution."
 # !--> 
-# 
-# 
-# <center>
-# <video width="620" height="440" src="images/dropout1_kiank.mp4" type="video/mp4" controls>
-# </video>
-# </center>
-# <br>
-# <caption><center> <u> Figure 2 </u>: Drop-out on the second hidden layer. <br> At each iteration, you shut down (= set to zero) each neuron of a layer with probability $1 - keep\_prob$ or keep it with probability $keep\_prob$ (50% here). The dropped neurons don't contribute to the training in both the forward and backward propagations of the iteration. </center></caption>
-# 
-# <center>
-# <video width="620" height="440" src="images/dropout2_kiank.mp4" type="video/mp4" controls>
-# </video>
-# </center>
-# 
-# <caption><center> <u> Figure 3 </u>: Drop-out on the first and third hidden layers. <br> $1^{st}$ layer: we shut down on average 40% of the neurons.  $3^{rd}$ layer: we shut down on average 20% of the neurons. </center></caption>
-# 
-# 
-# When you shut some neurons down, you actually modify your model. The idea behind drop-out is that at each iteration, you train a different model that uses only a subset of your neurons. With dropout, your neurons thus become less sensitive to the activation of one other specific neuron, because that other neuron might be shut down at any time. 
-# 
-# ### 3.1 - Forward propagation with dropout
-# 
-# **Exercise**: Implement the forward propagation with dropout. You are using a 3 layer neural network, and will add dropout to the first and second hidden layers. We will not apply dropout to the input layer or output layer. 
-# 
-# **Instructions**:
-# You would like to shut down some neurons in the first and second layers. To do that, you are going to carry out 4 Steps:
-# 1. In lecture, we dicussed creating a variable $d^{[1]}$ with the same shape as $a^{[1]}$ using `np.random.rand()` to randomly get numbers between 0 and 1. Here, you will use a vectorized implementation, so create a random matrix $D^{[1]} = [d^{[1](1)} d^{[1](2)} ... d^{[1](m)}] $ of the same dimension as $A^{[1]}$.
-# 2. Set each entry of $D^{[1]}$ to be 0 with probability (`1-keep_prob`) or 1 with probability (`keep_prob`), by thresholding values in $D^{[1]}$ appropriately. Hint: to set all the entries of a matrix X to 0 (if entry is less than 0.5) or 1 (if entry is more than 0.5) you would do: `X = (X < 0.5)`. Note that 0 and 1 are respectively equivalent to False and True.
-# 3. Set $A^{[1]}$ to $A^{[1]} * D^{[1]}$. (You are shutting down some neurons). You can think of $D^{[1]}$ as a mask, so that when it is multiplied with another matrix, it shuts down some of the values.
-# 4. Divide $A^{[1]}$ by `keep_prob`. By doing this you are assuring that the result of the cost will still have the same expected value as without drop-out. (This technique is also called inverted dropout.)
-
-# In[12]:
-
 # GRADED FUNCTION: forward_propagation_with_dropout
 
 def forward_propagation_with_dropout(X, parameters, keep_prob = 0.5):
@@ -474,26 +367,6 @@ A3, cache = forward_propagation_with_dropout(X_assess, parameters, keep_prob = 0
 print ("A3 = " + str(A3))
 
 
-# **Expected Output**: 
-# 
-# <table> 
-#     <tr>
-#     <td>
-#     **A3**
-#     </td>
-#         <td>
-#     [[ 0.36974721  0.00305176  0.04565099  0.49683389  0.36974721]]
-#     </td>
-#     
-#     </tr>
-# 
-# </table> 
-
-# ### 3.2 - Backward propagation with dropout
-# 
-# **Exercise**: Implement the backward propagation with dropout. As before, you are training a 3 layer network. Add dropout to the first and second hidden layers, using the masks $D^{[1]}$ and $D^{[2]}$ stored in the cache. 
-# 
-# **Instruction**:
 # Backpropagation with dropout is actually quite easy. You will have to carry out 2 Steps:
 # 1. You had previously shut down some neurons during forward propagation, by applying a mask $D^{[1]}$ to `A1`. In backpropagation, you will have to shut down the same neurons, by reapplying the same mask $D^{[1]}$ to `dA1`. 
 # 2. During forward propagation, you had divided `A1` by `keep_prob`. In backpropagation, you'll therefore have to divide `dA1` by `keep_prob` again (the calculus interpretation is that if $A^{[1]}$ is scaled by `keep_prob`, then its derivative $dA^{[1]}$ is also scaled by the same `keep_prob`).
@@ -558,32 +431,6 @@ print ("dA1 = " + str(gradients["dA1"]))
 print ("dA2 = " + str(gradients["dA2"]))
 
 
-# **Expected Output**: 
-# 
-# <table> 
-#     <tr>
-#     <td>
-#     **dA1**
-#     </td>
-#         <td>
-#     [[ 0.36544439  0.         -0.00188233  0.         -0.17408748]
-#  [ 0.65515713  0.         -0.00337459  0.         -0.        ]]
-#     </td>
-#     
-#     </tr>
-#     <tr>
-#     <td>
-#     **dA2**
-#     </td>
-#         <td>
-#     [[ 0.58180856  0.         -0.00299679  0.         -0.27715731]
-#  [ 0.          0.53159854 -0.          0.53159854 -0.34089673]
-#  [ 0.          0.         -0.00292733  0.         -0.        ]]
-#     </td>
-#     
-#     </tr>
-# </table> 
-
 # Let's now run the model with dropout (`keep_prob = 0.86`). It means at every iteration you shut down each neurons of layer 1 and 2 with 24% probability. The function `model()` will now call:
 # - `forward_propagation_with_dropout` instead of `forward_propagation`.
 # - `backward_propagation_with_dropout` instead of `backward_propagation`.
@@ -615,74 +462,10 @@ plot_decision_boundary(lambda x: predict_dec(parameters, x.T), train_X, train_Y)
 # - A **common mistake** when using dropout is to use it both in training and testing. You should use dropout (randomly eliminate nodes) only in training. 
 # - Deep learning frameworks like [tensorflow](https://www.tensorflow.org/api_docs/python/tf/nn/dropout), [PaddlePaddle](http://doc.paddlepaddle.org/release_doc/0.9.0/doc/ui/api/trainer_config_helpers/attrs.html), [keras](https://keras.io/layers/core/#dropout) or [caffe](http://caffe.berkeleyvision.org/tutorial/layers/dropout.html) come with a dropout layer implementation. Don't stress - you will soon learn some of these frameworks.
 # 
-# <font color='blue'>
 # **What you should remember about dropout:**
 # - Dropout is a regularization technique.
 # - You only use dropout during training. Don't use dropout (randomly eliminate nodes) during test time.
 # - Apply dropout both during forward and backward propagation.
 # - During training time, divide each dropout layer by keep_prob to keep the same expected value for the activations. For example, if keep_prob is 0.5, then we will on average shut down half the nodes, so the output will be scaled by 0.5 since only the remaining half are contributing to the solution. Dividing by 0.5 is equivalent to multiplying by 2. Hence, the output now has the same expected value. You can check that this works even when keep_prob is other values than 0.5.  
 
-# ## 4 - Conclusions
-
-# **Here are the results of our three models**: 
-# 
-# <table> 
-#     <tr>
-#         <td>
-#         **model**
-#         </td>
-#         <td>
-#         **train accuracy**
-#         </td>
-#         <td>
-#         **test accuracy**
-#         </td>
-# 
-#     </tr>
-#         <td>
-#         3-layer NN without regularization
-#         </td>
-#         <td>
-#         95%
-#         </td>
-#         <td>
-#         91.5%
-#         </td>
-#     <tr>
-#         <td>
-#         3-layer NN with L2-regularization
-#         </td>
-#         <td>
-#         94%
-#         </td>
-#         <td>
-#         93%
-#         </td>
-#     </tr>
-#     <tr>
-#         <td>
-#         3-layer NN with dropout
-#         </td>
-#         <td>
-#         93%
-#         </td>
-#         <td>
-#         95%
-#         </td>
-#     </tr>
-# </table> 
-
 # Note that regularization hurts training set performance! This is because it limits the ability of the network to overfit to the training set. But since it ultimately gives better test accuracy, it is helping your system. 
-
-# Congratulations for finishing this assignment! And also for revolutionizing French football. :-) 
-
-# <font color='blue'>
-# **What we want you to remember from this notebook**:
-# - Regularization will help you reduce overfitting.
-# - Regularization will drive your weights to lower values.
-# - L2 regularization and Dropout are two very effective regularization techniques.
-
-# In[ ]:
-
-
-
